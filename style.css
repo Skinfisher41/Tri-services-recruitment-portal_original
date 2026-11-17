@@ -1,0 +1,483 @@
+/* =========================================================
+   1. CSS VARIABLES & BOX MODEL RESET 
+   ========================================================= */
+:root {
+    --theme-color: #365926;   /* Default: Indian Army Olive */
+    --theme-accent: #8bc34a;  /* Highlight Accent */
+    --theme-light: #172314;   /* Tinted Panel Background */
+    --bg-page: #0d1117;
+    --bg-card: #161b22;
+    --border-color: #30363d;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--bg-page);
+    color: #f0f6fc;
+    line-height: 1.5;
+    transition: background-color 0.3s ease;
+}
+
+/* =========================================================
+   2. DYNAMIC THEME SWITCHER USING :has() PSEUDO-CLASS
+   ========================================================= */
+body:has(option[value="NAVY"]:checked) {
+    --theme-color: #153e75;
+    --theme-accent: #38bdf8;
+    --theme-light: #111e30;
+}
+
+body:has(option[value="AIRFORCE"]:checked) {
+    --theme-color: #1e4b8f;
+    --theme-accent: #60a5fa;
+    --theme-light: #142036;
+}
+
+.motto-navy, .motto-air { display: none; }
+body:has(option[value="NAVY"]:checked) .motto-army { display: none; }
+body:has(option[value="NAVY"]:checked) .motto-navy { display: inline; }
+body:has(option[value="AIRFORCE"]:checked) .motto-army { display: none; }
+body:has(option[value="AIRFORCE"]:checked) .motto-air { display: inline; }
+
+/* =========================================================
+   3. TRICOLOR BAR, HEADER & SVG STYLING
+   ========================================================= */
+.tricolor-bar {
+    display: flex;
+    height: 5px;
+}
+.saffron { flex: 1; background-color: #FF9933; }
+.white   { flex: 1; background-color: #FFFFFF; }
+.green   { flex: 1; background-color: #138808; }
+
+.gov-top-bar {
+    background-color: #05070a;
+    color: #c9d1d9;
+    font-size: 0.75rem;
+    padding: 6px 5%;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #21262d;
+}
+
+.gov-header {
+    background-color: var(--bg-card);
+    padding: 16px 5%;
+    border-bottom: 3px solid var(--theme-accent);
+    transition: border-color 0.3s ease;
+}
+
+.header-content {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.crest-svg {
+    color: var(--theme-accent);
+    flex-shrink: 0;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.crest-svg:hover {
+    transform: rotate(15deg) scale(1.05);
+}
+
+.header-text { flex: 1; }
+.header-text h1 { font-size: 1.1rem; color: #ffffff; }
+.header-text h2 { font-size: 1.35rem; color: var(--theme-accent); letter-spacing: 0.5px; }
+.header-text p  { font-size: 0.8rem; color: #8b949e; margin-top: 2px; }
+.header-text mark {
+    background-color: var(--theme-light);
+    color: var(--theme-accent);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.motto-box {
+    background-color: var(--theme-light);
+    border: 1px solid var(--theme-accent);
+    color: var(--theme-accent);
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Unit III: Keyframe Pulse Animation */
+.live-dot {
+    width: 9px;
+    height: 9px;
+    background-color: var(--theme-accent);
+    border-radius: 50%;
+    animation: pulseGlow 1.5s infinite;
+}
+
+@keyframes pulseGlow {
+    0%   { transform: scale(0.9); opacity: 0.6; }
+    50%  { transform: scale(1.25); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+/* =========================================================
+   4. FLEXBOX NAVIGATION & CSS ANIMATED TICKER
+   ========================================================= */
+.gov-nav {
+    background-color: var(--theme-color);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    transition: background-color 0.3s ease;
+}
+
+.gov-nav a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: background-color 0.25s ease;
+}
+
+.gov-nav a:hover, .gov-nav a.active {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+.ticker-wrap {
+    background-color: #221c10;
+    color: #ffcc00;
+    font-size: 0.82rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid #554411;
+}
+
+.ticker-title {
+    background-color: #cc0000;
+    color: #ffffff;
+    padding: 7px 14px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.ticker-track {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ticker-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scrollNews 22s linear infinite;
+}
+
+.ticker-wrap:hover .ticker-text {
+    animation-play-state: paused;
+}
+
+@keyframes scrollNews {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* =========================================================
+   5. CSS GRID MAIN LAYOUT (Form + Sidebar)
+   ========================================================= */
+.portal-grid {
+    max-width: 1140px;
+    margin: 24px auto;
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 2.1fr 1fr;
+    gap: 22px;
+    align-items: start;
+}
+
+.form-card, .side-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.form-title-bar {
+    background-color: var(--theme-color);
+    color: #ffffff;
+    padding: 12px 18px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* =========================================================
+   6. FORM STYLING, ATTRIBUTE SELECTORS & PSEUDO-ELEMENTS
+   ========================================================= */
+form { padding: 20px; }
+
+fieldset {
+    background-color: #1c2128;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+legend {
+    background-color: var(--theme-color);
+    color: #ffffff;
+    border: 1px solid var(--theme-accent);
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.row .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-group { margin-bottom: 14px; }
+
+label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #c9d1d9;
+}
+
+/*  Pseudo-element (::after) to mark required field labels */
+.form-group label::after {
+    content: " *";
+    color: #ff5555;
+}
+
+/*  Attribute Selectors */
+input[required], select[required], textarea[required] {
+    width: 100%;
+    padding: 9px 10px;
+    background-color: var(--bg-page);
+    color: #ffffff;
+    border: 1px solid #484f58;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color-scheme: dark;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--theme-accent);
+    box-shadow: 0 0 0 2px rgba(139, 195, 74, 0.25);
+}
+
+/*  Validation State Pseudo-classes (:valid & :invalid) */
+input:not(:placeholder-shown):valid {
+    border-left: 4px solid #4ade80;
+}
+
+input:not(:placeholder-shown):invalid {
+    border-left: 4px solid #f87171;
+}
+
+.captcha-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0 14px;
+}
+
+.captcha-box {
+    background-color: #000000;
+    color: var(--theme-accent);
+    border: 1px dashed var(--theme-accent);
+    padding: 7px 16px;
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.declaration-box {
+    background-color: var(--theme-light);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 4px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.declaration-box input { width: auto; margin-top: 3px; }
+.declaration-box label { font-weight: normal; font-size: 0.8rem; margin: 0; }
+.declaration-box label::after { content: ""; }
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-submit, .btn-reset {
+    padding: 10px 22px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-submit {
+    background-color: var(--theme-color);
+    color: #ffffff;
+    border: 1px solid var(--theme-accent);
+}
+
+.btn-reset {
+    background-color: #30363d;
+    color: #ffffff;
+    border: 1px solid #6e7681;
+}
+
+.btn-submit:hover, .btn-reset:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   7. SIDEBAR CARDS, LISTS & TABLES
+   ========================================================= */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.side-card { padding: 16px; }
+
+.side-card h3 {
+    color: var(--theme-accent);
+    font-size: 0.95rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+th, td {
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--theme-light);
+    color: var(--theme-accent);
+}
+
+.step-list, .doc-list {
+    padding-left: 18px;
+    font-size: 0.82rem;
+    color: #c9d1d9;
+}
+
+.step-list li, .doc-list li {
+    margin-bottom: 7px;
+}
+
+code {
+    background-color: #0d1117;
+    color: var(--theme-accent);
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+/* =========================================================
+   8. PURE CSS :target RECEIPT & FOOTER
+   ========================================================= */
+.ack-box {
+    display: none;
+    margin: 20px;
+    padding: 16px;
+    background-color: var(--bg-page);
+    border: 2px solid var(--theme-accent);
+    border-radius: 5px;
+}
+
+.ack-box:target { display: block; }
+
+.ack-header {
+    text-align: center;
+    color: var(--theme-accent);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+.status-ok { color: #4ade80; font-weight: bold; }
+.ack-footer { text-align: center; margin-top: 12px; }
+
+.btn-close-ack {
+    display: inline-block;
+    background-color: var(--theme-color);
+    color: #ffffff;
+    text-decoration: none;
+    border: 1px solid var(--theme-accent);
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.gov-footer {
+    background-color: #05070a;
+    color: #8b949e;
+    text-align: center;
+    padding: 16px;
+    font-size: 0.8rem;
+    border-top: 3px solid #FF9933;
+    margin-top: 30px;
+}
+
+/* =========================================================
+   9. RESPONSIVE MEDIA QUERIES (Unit III)
+   ========================================================= */
+@media (max-width: 820px) {
+    .portal-grid {
+        grid-template-columns: 1fr;
+    }
+    .header-content {
+        justify-content: center;
+        text-align: center;
+    }
+}
